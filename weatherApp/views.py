@@ -9,6 +9,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.views.decorators.cache import cache_page
 
+# index  function retrieves weather data for a list of cities using the OpenWeatherMap API, 
+# paginates the results, and renders them in an index.html. 
+# It also uses caching to improve performance by reducing API requests.
 @cache_page(60*30) 
 def index(request):
     cities = ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix', 'Philadelphia', 'San Antonio', 'San Diego', 'Dallas', 'San Jose', 'Austin', 'Jacksonville', 'Fort Worth', 'Columbus', 'San Francisco', 'Charlotte', 'Indianapolis', 'Seattle', 'Denver', 'Washington', 'Boston', 'Nashville', 'El Paso', 'Detroit', 'Memphis', 'Portland', 'Oklahoma City', 'Las Vegas', 'Louisville', 'Baltimore']
@@ -45,6 +48,8 @@ def index(request):
     }
     return render(request, 'main/index.html', context)
 
+# login_view function authenticating the user and redirecting them to the 
+# index.html page or rendering an error message if authentication fails.
 def login_view(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -60,6 +65,8 @@ def login_view(request):
     else:
         return render(request, 'registration/login.html')
 
+# logout_view function logging the user out and rendering a template with a 
+# message indicating that the user has been successfully logged out.
 def logout_view(request):
     logout(request)
     message = 'Successfully logged out.'
