@@ -1,0 +1,96 @@
+.container-fluid {
+    width: 100%;
+    max-width: none;
+  }
+  
+  .table-responsive {
+    overflow-x: auto;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin: 0 auto;
+  }
+
+  th,
+  td {
+    text-align: center;
+    padding: 10px;
+    border: 1px solid #ddd;
+  }
+  
+  thead {
+    background-color: #f2f2f2;
+  }
+  
+  th {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  tr:hover {
+    background-color: #ddd;
+  }
+  
+  
+  th, td {
+    text-align: center;
+  }
+  
+  .pagination {
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .page-item.active .page-link {
+    background-color: #007bff;
+    border-color: #007bff;
+  }
+  
+  .page-link {
+    color: #007bff;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .page-link:hover {
+    text-decoration: none;
+    color: #0056b3;
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+  }
+  
+  .page-link:focus {
+    box-shadow: none;
+  }
+  
+  .page-item.disabled .page-link {
+    color: #6c757d;
+    pointer-events: none;
+    cursor: not-allowed;
+    background-color: transparent;
+    border-color: #dee2e6;
+  }
+  
+  .page-link:not(:disabled):not(.disabled) {
+    cursor: pointer;
+  }
+  
+  th:first-child,
+  td:first-child {
+    text-align: left;
+  }
+  
+  @media (max-width: 575px) {
+    .pagination {
+      margin-top: 10px;
+    }
+  }
+  
