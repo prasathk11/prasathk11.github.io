@@ -15,8 +15,6 @@ import os
 
 
 import os
-import django_heroku
-import dj_database_url
 
 BASE_DIR = BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -83,8 +81,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL ='index'
 
-
-django_heroku.settings(locals())
 TIME_ZONE = 'UTC'
 
 USE_I18N = True

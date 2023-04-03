@@ -1,26 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8">
-    <title>Weather App</title>
-  </head>
-  <body>
-    <h1>Login Page</h1>
-    {% if message %}
-<div class="alert alert-danger">{{ message }}</div>
-{% endif %}
-    <form action="" method="POST">
-      {% csrf_token %}
-    {{form.as_p}}
-      <div>
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
-      </div>
-      <div>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-      </div>
-      <button type="submit">Login</button>
-    </form>
-  </body>
+    <title>Login Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/css/bootstrap.min.css"
+          integrity="sha384-H+K6PtpoCwT8WwDsE6O/mU6ZaIZ5M9MU+Y7V5eKh4KLiq5t5LQ56WYAaJgWO5fS+"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-md-4 col-sm-6 col-8">
+            <div class="card login-card">
+                <div class="card-body">
+                    <h2 class="text-center mb-4">Login</h2>
+                    {% if message %}
+                        <div class="alert alert-danger">{{ message }}</div>
+                    {% endif %}
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="username">Username:</label>
+                            <input type="text" class="form-control" id="username" name="username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password:</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block mt-4">Login</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha384-/Y6p5V/I9nYBjM6iWqb2JsBfQz/3gM2JGNTx1zNlV9zzTtmI9+J6oWt8hqJQVvHG"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.10.2/umd/popper.min.js"
+        integrity="sha512-KSQwJG5j5ue5td9lRLmugvcG+ZBlE8EsF05Q1CJz7VfADGxMUBqrV+2tX0FtV/KhWpEOK0Cc1prpO/jBgl99nw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/js/bootstrap.min.js"
+        integrity="sha384-e0U9IEpUoHgB0DdOo5w+p0I+5v5JWlb5pupCOlOnBo9TwYcFk2WYUA8osVIlh/Hj"
+        crossorigin="anonymous"></script>
+</body>
 </html>
