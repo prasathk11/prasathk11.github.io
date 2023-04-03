@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Weather App</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <style>
+    .logout-btn {
+    float: right;
+   }
+  </style>
+</head>
+<body> 
+  <div class="container-fluid">
+    <h1 class="text-center my-3">Weather App<a href="/logout" class="btn btn-primary logout-btn">Logout</a></h1>
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th>City</th>
+          <th>Country</th>
+          <th>Temperature (°C)</th>
+          <th>Pressure (hPa)</th>
+          <th>Humidity (%)</th>
+          <th>Description</th>
+          <th>Icon</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for weather_data in city_data %}
+        <tr>
+          <td>{{ weather_data.city }}</td>
+          <td>{{ weather_data.country_code }}</td>
+          <td>{{ weather_data.temp }}</td>
+          <td>{{ weather_data.pressure }}</td>
+          <td>{{ weather_data.humidity }}</td>
+          <td>{{ weather_data.description }}</td>
+          <td><img src="http://openweathermap.org/img/w/{{ weather_data.icon }}.png" alt="{{ weather_data.main }}" /></td>
+        </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    {% if city_data.has_other_pages %}
+    <div class="row">
+      <div class="col-12">
+        <nav aria-label="Page navigation">
+          <ul class="pagination justify-content-center">
+            {% if city_data.has_previous %}
+            <li class="page-item">
+              <a class="page-link" href="?page=1">&laquo; First</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="?page={{ city_data.previous_page_number }}">Previous</a>
+            </li>
+            {% endif %}
+            {% for i in city_data.paginator.page_range %}
+            {% if city_data.number == i %}
+            <li class="page-item active">
+              <a class="page-link" href="#">{{ i }} <span class="sr-only">(current)</span></a>
+            </li>
+            {% else %}
+            {% if i > city_data.number|add:'-3' and i < city_data.number|add:'3' %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+            </li>
+            {% endif %}
+            {% endif %}
+            {% endfor %}
+            {% if city_data.has_next %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ city_data.next_page_number }}">Next</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="?page={{ city_data.paginator.num_pages }}">Last &raquo;</a>
+            </li>
+            {% endif %}
+          </ul>
+        </nav>
+      </div>
+    </div>
+    {% endif %}
+
+  </div>
+</body>
+</html>
