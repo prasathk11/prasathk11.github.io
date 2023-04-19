@@ -1,23 +1,17 @@
-from django.shortcuts import render
-from django.contrib.auth import logout
-from django.shortcuts import redirect
 import requests
-from django.shortcuts import render
 from django.core.paginator import Paginator
-from django.shortcuts import render
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
-from django.views.decorators.cache import cache_page
+from django.contrib.auth import authenticate, login, logout
+from django.core.cache import cache
+from django.utils import timezone
+from django.contrib.auth.hashers import make_password, check_password
+from .models import CityWeatherData, User
 
-# index  function retrieves weather data for a list of cities using the OpenWeatherMap API, 
-# paginates the results, and renders them in an index.html. 
-# It also uses caching to improve performance by reducing API requests.
-@cache_page(60*30) 
-def index(request):
+
+def update():
     cities = ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix', 'Philadelphia', 'San Antonio', 'San Diego', 'Dallas', 'San Jose', 'Austin', 'Jacksonville', 'Fort Worth', 'Columbus', 'San Francisco', 'Charlotte', 'Indianapolis', 'Seattle', 'Denver', 'Washington', 'Boston', 'Nashville', 'El Paso', 'Detroit', 'Memphis', 'Portland', 'Oklahoma City', 'Las Vegas', 'Louisville', 'Baltimore']
-    city_data = []
     for city in cities:
-        url = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=metric&appid={}'.format(city, '3ac3c441a33320613634b943eca4199a')
+        url = f'http://api.openweathermap.org/data/2.5/weather?q={city}&units=metric&appid=3ac3c441a33320613634b943eca4199a'
         r = requests.get(url).json()
         if r.get('cod') == 200:
             country_code = r['sys']['country']
@@ -28,18 +22,24 @@ def index(request):
             main = r['weather'][0]['main']
             description = r['weather'][0]['description']
             icon = r['weather'][0]['icon']
-            weather_data = {
-                'city': city,
-                'country_code': country_code,
-                'coordinate': coordinate,
-                'temp': temp,
-                'pressure': pressure,
-                'humidity': humidity,
-                'main': main,
-                'description': description,
-                'icon': icon,
-            }
-            city_data.append(weather_data)
+            if temp is not None:
+                data, _ = CityWeatherData.objects.get_or_create(city=city)
+                data.country_code = country_code
+                data.coordinate = coordinate
+                data.temp = temp
+                data.pressure = pressure
+                data.humidity = humidity
+                data.main = main
+                data.description = description
+                data.icon = icon
+                data.last_updated = timezone.now()
+                data.save()
+
+
+def index(request):
+    if not CityWeatherData.objects.exists() or (timezone.now() - CityWeatherData.objects.order_by('-last_updated').first().last_updated).total_seconds() > 60*30:
+        update()
+    city_data = CityWeatherData.objects.all().order_by('city')
     paginator = Paginator(city_data, 10)
     page = request.GET.get('page')
     city_data = paginator.get_page(page)
@@ -48,8 +48,6 @@ def index(request):
     }
     return render(request, 'main/index.html', context)
 
-# login_view function authenticating the user and redirecting them to the 
-# index.html page or rendering an error message if authentication fails.
 def login_view(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -65,10 +63,20 @@ def login_view(request):
     else:
         return render(request, 'registration/login.html')
 
-# logout_view function logging the user out and rendering a template with a 
-# message indicating that the user has been successfully logged out.
 def logout_view(request):
     logout(request)
     message = 'Successfully logged out.'
     context = {'message' : message}
     return render(request, 'registration/login.html', context)
+
+
+def register(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        hashed_password = make_password(password)
+        user = User.objects.create(username=username, password=hashed_password)
+        user.save()
+        return redirect('login')
+    else:
+        return render(request, 'registration/register.html')
