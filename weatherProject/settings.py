@@ -22,7 +22,7 @@ SECRET_KEY = 'django-insecure-n*bvo#8dg1y%c)wbt&c$epjpg_c1e&412+t+&=o9yj9z7v5q^e
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['.vercel.app']
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -36,11 +36,12 @@ INSTALLED_APPS = [
 
 PASSWORD_HASHERS = [    
     'django.contrib.auth.hashers.Argon2PasswordHasher',    
-    'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',    
-    'django.contrib.auth.hashers.BCryptPasswordHasher',    
     'django.contrib.auth.hashers.PBKDF2PasswordHasher',    
-    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',    
+    'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',    
+    'django.contrib.auth.hashers.BCryptPasswordHasher',
     ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

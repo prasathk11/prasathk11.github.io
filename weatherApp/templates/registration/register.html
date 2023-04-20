@@ -1,63 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Register</title>
-        <!-- Include Bootstrap CSS -->
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-        crossorigin="anonymous">
-    </head>
-    <body>
-        <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-            <h2 class="my-4 text-center">Register</h2>
-            <form method="post">
-                {% csrf_token %}
-                <div class="form-group">
-                <label for="{{ form.username.id_for_label }}">Username:</label>
-                {{ form.username }}
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+</head>
+<body>
+    <div>
+        <h2>Register</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <div>
                 {% if form.username.errors %}
-                    <div class="invalid-feedback">{{ form.username.errors|first }}</div>
+                <div>{{ form.username.errors|first }}</div>
                 {% endif %}
-                </div>
-                <div class="form-group">
-                <label for="{{ form.email.id_for_label }}">Email:</label>
-                {{ form.email }}
-                {% if form.email.errors %}
-                    <div class="invalid-feedback">{{ form.email.errors|first }}</div>
-                {% endif %}
-                </div>
-                <div class="form-group">
-                <label for="{{ form.password1.id_for_label }}">Password:</label>
-                {{ form.password1 }}
-                {% if form.password1.errors %}
-                    <div class="invalid-feedback">{{ form.password1.errors|first }}</div>
-                {% endif %}
-                </div>
-                <div class="form-group">
-                <label for="{{ form.password2.id_for_label }}">Confirm Password:</label>
-                {{ form.password2 }}
-                {% if form.password2.errors %}
-                    <div class="invalid-feedback">{{ form.password2.errors|first }}</div>
-                {% endif %}
-                </div>
-                <button type="submit" class="btn btn-primary">Register</button>
-            </form>
             </div>
-        </div>
-        </div>
-        <!-- Include Bootstrap JS -->
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi4jq7I"
-        crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNVQ8vc"
-        crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-        crossorigin="anonymous"></script>
-    </body>
+            <div>
+                {% if form.email.errors %}
+                <div>{{ form.email.errors|first }}</div>
+                {% endif %}
+            </div>
+            <div>
+                {% if form.password1.errors %}
+                <div>{{ form.password1.errors|first }}</div>
+                {% endif %}
+            </div>
+            <div>
+                {% if form.password2.errors %}
+                <div>{{ form.password2.errors|first }}</div>
+                {% endif %}
+            </div>
+            {{ form.as_p }}
+            <button type="submit">Register</button>
+        </form>
+    </div>
+</body>
 </html>

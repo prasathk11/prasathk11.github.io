@@ -5,9 +5,8 @@
     <title>Login Page</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/css/bootstrap.min.css"
-          integrity="sha384-H+K6PtpoCwT8WwDsE6O/mU6ZaIZ5M9MU+Y7V5eKh4KLiq5t5LQ56WYAaJgWO5fS+"
-          crossorigin="anonymous">
-    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+        integrity="sha384-H+K6PtpoCwT8WwDsE6O/mU6ZaIZ5M9MU+Y7V5eKh4KLiq5t5LQ56WYAaJgWO5fS+"
+        crossorigin="anonymous">
 </head>
 <body>
 <div class="container-fluid">
@@ -31,6 +30,10 @@
                         </div>
                         <button type="submit" class="btn btn-primary btn-block mt-4">Login</button>
                     </form>
+                    <div class="mt-3 text-center">
+                        <span>Don't have an account?</span>
+                        <a href="{% url 'register' %}" class="ml-1">Sign up</a>
+                    </div>
                 </div>
             </div>
         </div>
