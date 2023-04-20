@@ -10,7 +10,5 @@ class RegistrationForm(UserCreationForm):
         fields = ('username', 'email', 'password1', 'password2')
 
 class LoginForm(AuthenticationForm):
-    error_messages = {
-        'invalid_login': "Please enter a correct %(username)s and password. Note that both fields may be case-sensitive.",
-        'inactive': "This account is inactive.",
-    }
+    username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Username'}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Password'}))

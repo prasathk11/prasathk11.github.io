@@ -5,11 +5,12 @@ from django.contrib.auth import authenticate, login, logout
 from django.utils import timezone
 from django.contrib import messages
 import hashlib
-
+from .forms import LoginForm
 from django.contrib.auth.hashers import make_password, check_password
 from .models import CityWeatherData, User
 from .forms import RegistrationForm
 
+#Update function update the DB by hitting the wheather App API once index function is called.
 def update():
     cities = ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix', 'Philadelphia', 'San Antonio', 'San Diego', 'Dallas', 'San Jose', 'Austin', 'Jacksonville', 'Fort Worth', 'Columbus', 'San Francisco', 'Charlotte', 'Indianapolis', 'Seattle', 'Denver', 'Washington', 'Boston', 'Nashville', 'El Paso', 'Detroit', 'Memphis', 'Portland', 'Oklahoma City', 'Las Vegas', 'Louisville', 'Baltimore']
     for city in cities:
@@ -37,7 +38,7 @@ def update():
                 data.last_updated = timezone.now()
                 data.save()
 
-
+#Index function fetch data from DB after every 30 min and display to User with pagination of size 10.
 def index(request):
     if not CityWeatherData.objects.exists() or (timezone.now() - CityWeatherData.objects.order_by('-last_updated').first().last_updated).total_seconds() > 60*30:
         update()
@@ -49,6 +50,52 @@ def index(request):
         'city_data': city_data,
     }
     return render(request, 'main/index.html', context)
+
+#Login_view function is to logout successfully and redirect to login.
+def logout_view(request):
+    logout(request)
+    message = 'Successfully logged out.'
+    context = {'message' : message}
+    return render(request, 'registration/login.html', context)
+
+#Register function is to register user. After registering User is successful added to DB.
+def register(request):
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            messages.success(request, 'Successfully registered.')
+            return redirect('login')
+    else:
+        form = RegistrationForm()
+
+    return render(request, 'registration/register.html', {'form': form})
+
+#Login function to authorize and authenticate registered Users.
+def login_view(request):
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        print(form.has_error)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('index')
+            else:
+                messages.error(request, 'Invalid username or password.')
+        else:
+            print(form.errors)
+    else:
+        form = LoginForm()
+
+    return render(request, 'registration/login.html', {'form': form})
+
+
+
+#Implemented login Managment without Django build-in Form. Used hashing and salt and stored in DB Used Authenticate in 
+# login for authentication. and check_password for checking passoword got through login and hashed password stored in DB
 
 # def login_view(request):
 #     if request.method == 'POST':
@@ -69,45 +116,20 @@ def index(request):
 #     else:
 #         return render(request, 'registration/login.html')
 
-
-def logout_view(request):
-    logout(request)
-    message = 'Successfully logged out.'
-    context = {'message' : message}
-    return render(request, 'registration/login.html', context)
-
-
-def register(request):
-    if request.method == 'POST':
-        form = RegistrationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            messages.success(request, 'Successfully registered.')
-            return redirect('login')
-    else:
-        form = RegistrationForm()
-
-    return render(request, 'registration/register.html', {'form': form})
-
-
-from .forms import LoginForm
-
-def login_view(request):
-    if request.method == 'POST':
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
-            user = authenticate(request, username=username, password=password)
-            if user is not None:
-                login(request, user)
-                return redirect('index')
-            else:
-                messages.error(request, 'Invalid username or password.')
-        else:
-            print(form.errors)
-    else:
-        form = LoginForm()
-
-    return render(request, 'registration/login.html', {'form': form})
-
+# def register(request):
+#     if request.method == 'POST':
+#         username = request.POST['username']
+#         password = request.POST['password']
+#         confirm_password = request.POST['confirm_password']
+#         if password != confirm_password:
+#             message = 'Passwords do not match. Please try again.'
+#             context = {'message': message}
+#             return render(request, 'registration/register.html', context)
+#         salt = os.urandom(32)
+#         salted_password = (salt + password.encode('utf-8'))
+#         hashed_password = make_password(salted_password, salt=salt)
+#         user = User(username=username, password=hashed_password)
+#         user.save()
+#         return redirect('login')
+#     else:
+#         return render(request, 'registration/register.html')
